@@ -13,7 +13,8 @@ screen.fill(color_back)
 
 for obst in T.getObjects():
     x,y=obst.getCoord()
-    pygame.draw.circle(screen, color_wall, (x,y),10)
+    color_wall=(0,0,255)
+    #pygame.draw.circle(screen, color_wall, (x,y),10)
 
 
 pygame.display.update()  #indispensable pour voir s'afficher quelque chose.
@@ -26,12 +27,17 @@ while done==False:
     T.avanceVoyageurs
     for voyageur in T.getObjects():
         x,y=voyageur.getCoord()
+        print(x,y)
+        color_back=(255,0,0)
         pygame.draw.circle(screen,color_back,(x,y),10)
-        color_voyageur=(255,0,255)
-        pygame.draw.circle(screen,color_voyageur,(x,y),10)
+        #color_voyageur=(255,0,100)
+        #pygame.draw.circle(screen,color_voyageur,(x,y),10)
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             done=True
+        if pygame.mouse.get_pressed()[0]:
+            done=True
+    print("pass")
 
 pygame.quit()
 

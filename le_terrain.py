@@ -53,9 +53,9 @@ class Terrain():
         return self.porte
 
     def initObstacles(self):
-        self.creerObstacle([1,1])
-        self.creerObstacle([3,3])
-        self.creerObstacle([8,2])
+        self.creerObstacle([10,10])
+        self.creerObstacle([30,30])
+        self.creerObstacle([80,20])
 
     def creerObstacle(self, coord):
         """CrÃ©e un obstacle."""
