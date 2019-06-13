@@ -1,5 +1,5 @@
-### Importations ###
-from math import *
+﻿### Importations ###
+#from math import *
 
 ### Paramètres ###
 ### Fonctions ###
@@ -10,6 +10,15 @@ def signe(x):
     else:
         return x/abs(x)
 
+def addListe(l1,l2):
+    """Additionne les valeurs de deux listes de même taille."""
+    if len(l1)==len(l2):
+        l3=[]
+        for i in range(len(l1)):
+            l3.append(l1[i]+l2[i])
+        return l3
+    else:
+        return []
 
 ### Classes ###
 class Objet:
@@ -31,24 +40,51 @@ class Obstacle(Objet):
 
 class Voyageur(Objet):
     """Un objet qui bouge."""
-    def __init__(self,boss, coord,destination, couleur="black"):
+    def __init__(self,boss, coord,destination,couleur="black"):
         Objet.__init__(self, boss, coord)
         self.couleur=couleur
         self.destination=destination
+        self.direction=(0,0)
+        self.directionPossible=[(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
+        self.objetProche={} # Dictionnaire des cases autour
 
-        self.vitesse=[0,0]
+    def regarderAutour(self):
+        """Actualise la liste objets autour du voyageur."""
+        # Réinitialise le tableau des objets proches
+        self.objetProche={}
+        for i in range(-1,2):
+            for j in range(-1,2):
+                self.objetProche[i,j]=None
+        # Recherche des objets proches
+        for obj in self.boss.getObject():
+            X=obj.coord[0]-self.coord[0]
+            Y=obj.coord[1]-self.coord[1]
+            if -1<=X<=1 and -1<=Y<=1:
+                self.objetProche[X,Y]=obj
 
     def definirVitesse(self):
         """Définie la direction à prendre."""
-        None
+        self.direction=(signe(self.destination[0]-self.coord[0]),signe(self.destination[1]-self.coord[1]))
+        self.regarderAutour()
 
-
-
-
-
+        # Si la case n'est pas libre
+        if self.objetProche[self.direction]!=None:
+            # On test les autres directions
+            i=self.directionPossible.index(self.direction)
+            if self.objetProche[self.directionPossible[(i+1)%8]]==None:
+                self.direction=self.directionPossible[(i+1)%8]
+            elif self.objetProche[self.directionPossible[(i-1)%8]]==None:
+                self.direction=self.directionPossible[(i-1)%8]
+            elif self.objetProche[self.directionPossible[(i+2)%8]]==None:
+                self.direction=self.directionPossible[(i+2)%8]
+            elif self.objetProche[self.directionPossible[(i-2)%8]]==None:
+                self.direction=self.directionPossible[(i-2)%8]
+            else:
+                self.direction=(0,0)
 
     def avancer(self):
-        None
+        """Avance le voyageur dans la direction défini par vitesse."""
+        self.coord=addListe(self.coord,self.direction)
 
     def testFin(self):
         """Teste si le voyageur est arrivé."""

@@ -1,10 +1,32 @@
-﻿from le_terrain import *
+﻿from FouleObject import *
+from le_terrain import *
 import pygame
 
 color_back=(0,255, 102 )
 color_wall=(255,255, 255)
 
+class voyageur_vue:
+    """sauvegarde les caractéristiques d'un polygone tkinter"""
+    def __init__(self, screen, voyageur_modele):
+        self.observe = voyageur_modele
+        self.screen = screen
+        self.x,self.y = voyageur_modele.getCoord()
+        self.affichage_cercle(screen,x,y,(255,0,0))
+        voyageur_modele.attacher_observateur(self)
+
+    def mise_a_jour(self):
+        self.affichage_cercle(screen,self.x,self.y,color_back)
+        self.x,self.y = voyageur_modele.getCoord()
+        self.affichage_cercle(screen,self.x,self.y,(255,0,0))
+        self.toile.update()
+
+    def affichage_cercle(screen,x,y,color):
+            pygame.draw.circle(screen,(0,255,255),(x,y),10)
+
+
+
 list_color_people=[(255,0,0), (255,255,0),(255, 102, 0),(102,51, 0),(255, 51, 102),(255,153,51)]
+
 pygame.init()
 nb_l, nb_w=100,100
 T=Terrain(nb_l, nb_w)

@@ -29,6 +29,18 @@ def distance(P1,P2):
 
 
 ### Classes ###
+class Observable:
+    def __init__(self, vue):
+        self.observateurs = []
+
+    def attacher_observateur(self, observateur):
+        self.observateurs.append(observateur)
+
+    def notifier(self):
+        for o in self.observateurs:
+            o.mise_a_jour()
+
+
 
 class Terrain():
     """Terrain dans lequel la foule se dÃ©place."""
@@ -92,9 +104,10 @@ class Terrain():
             voya.avancer()
 
 ### Classes ###
-class Objet:
+class Objet(Observable):
     """Un objet sur le terrain."""
     def __init__(self,boss, coord):
+        Observable.__init__(self,boss)
         self.boss=boss
         self.coord=coord
 
@@ -105,7 +118,7 @@ class Objet:
 
 class Obstacle(Objet):
     """Un objet fixe."""
-    def __init__(self,boss, coord, couleur="black"):
+    def __init__(self, boss, coord, couleur="black"):
         Objet.__init__(self, boss, coord)
         self.couleur=couleur
 
