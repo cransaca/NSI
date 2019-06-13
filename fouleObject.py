@@ -8,7 +8,7 @@ def signe(x):
     if x==0:
         return 0
     else:
-        return x/abs(x)
+        return int(x/abs(x))
 
 def addListe(l1,l2):
     """Additionne les valeurs de deux listes de même taille."""
@@ -21,16 +21,27 @@ def addListe(l1,l2):
         return []
 
 ### Classes ###
-class Objet:
+class Observable:
+    def __init__(self, vue):
+        self.observateurs = []
+
+    def attacher_observateur(self, observateur):
+        self.observateurs.append(observateur)
+
+    def notifier(self):
+        for o in self.observateurs:
+            o.mise_a_jour()
+
+class Objet(Observable):
     """Un objet sur le terrain."""
     def __init__(self,boss, coord):
+        Observable.__init__(self,boss)
         self.boss=boss
         self.coord=coord
 
     def getCoord(self):
-        """Renvoie la liste des coordonnées."""
+        """Renvoie la liste des coordonnÃƒÂ©es."""
         return self.coord
-
 
 class Obstacle(Objet):
     """Un objet fixe."""
@@ -56,7 +67,7 @@ class Voyageur(Objet):
             for j in range(-1,2):
                 self.objetProche[i,j]=None
         # Recherche des objets proches
-        for obj in self.boss.getObject():
+        for obj in self.boss.getObjects():
             X=obj.coord[0]-self.coord[0]
             Y=obj.coord[1]-self.coord[1]
             if -1<=X<=1 and -1<=Y<=1:
@@ -68,7 +79,7 @@ class Voyageur(Objet):
         self.regarderAutour()
 
         # Si la case n'est pas libre
-        if self.objetProche[self.direction]!=None:
+        if self.objetProche[self.direction]!=None and not self.testFin():
             # On test les autres directions
             i=self.directionPossible.index(self.direction)
             if self.objetProche[self.directionPossible[(i+1)%8]]==None:
@@ -84,6 +95,7 @@ class Voyageur(Objet):
 
     def avancer(self):
         """Avance le voyageur dans la direction défini par vitesse."""
+        self.definirVitesse()
         self.coord=addListe(self.coord,self.direction)
 
     def testFin(self):
@@ -98,8 +110,8 @@ class Voyageur(Objet):
 
 
 
-
-
+if __name__=="__main":
+    pass
 
 
 
