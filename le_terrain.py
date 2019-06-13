@@ -1,7 +1,7 @@
 ### Importations ###
 from math import *
 from random import *
-
+from FouleObject import *
 ### ParamÃƒÂ¨tres ###
 ### Fonctions ###
 def signe(x):
@@ -29,16 +29,7 @@ def distance(P1,P2):
 
 
 ### Classes ###
-class Observable:
-    def __init__(self, vue):
-        self.observateurs = []
 
-    def attacher_observateur(self, observateur):
-        self.observateurs.append(observateur)
-
-    def notifier(self):
-        for o in self.observateurs:
-            o.mise_a_jour()
 
 
 
@@ -52,7 +43,7 @@ class Terrain():
         # Organisation du terrain
         self.listAcces=[]
         self.listObstacles=[]
-        self.porte=[[0,self.longueur//2],[self.largeur,self.longueur//2],[self.largeur//2,0],[self.largeur//2,self.longueur]]
+        self.porte=[[0,self.longueur//2],[self.largeur-1,self.longueur//2],[self.largeur//2,0],[self.largeur//2,self.longueur-1]]
 
         self.initObstacles()
         self.creerMurs()
@@ -79,13 +70,14 @@ class Terrain():
 
     def creerMurs(self):
         for i in range(self.largeur):
-            if not [i,self.longueur] in self.porte:
-                self.creerObstacle([i,self.longueur])
+            if not [i,self.longueur-1] in self.porte:
+                self.creerObstacle([i,self.longueur-1])
+                print(i,self.longueur-1)
             if not [i,0] in self.porte:
                 self.creerObstacle([i,0])
         for i in range(self.longueur):
-            if not [i,self.longueur] in self.porte:
-                self.creerObstacle([i,self.longueur])
+            if not [self.longueur-1,i] in self.porte:
+                self.creerObstacle([self.longueur-1,i])
             if not [0,i] in self.porte:
                 self.creerObstacle([0,i])
 
@@ -104,52 +96,6 @@ class Terrain():
             voya.avancer()
 
 ### Classes ###
-class Objet(Observable):
-    """Un objet sur le terrain."""
-    def __init__(self,boss, coord):
-        Observable.__init__(self,boss)
-        self.boss=boss
-        self.coord=coord
-
-    def getCoord(self):
-        """Renvoie la liste des coordonnÃƒÂ©es."""
-        return self.coord
-
-
-class Obstacle(Objet):
-    """Un objet fixe."""
-    def __init__(self, boss, coord, couleur="black"):
-        Objet.__init__(self, boss, coord)
-        self.couleur=couleur
-
-class Voyageur(Objet):
-    """Un objet qui bouge."""
-    def __init__(self,boss, coord,destination, couleur="black"):
-        Objet.__init__(self, boss, coord)
-        self.couleur=couleur
-        self.destination=destination
-
-        self.vitesse=[0,0]
-
-    def definirVitesse(self):
-        """DÃƒÂ©finie la direction ÃƒÂ  prendre."""
-        None
-
-    def avancer(self):
-        None
-
-    def testFin(self):
-        """Teste si le voyageur est arrivÃƒÂ©."""
-        if self.coord==self.destination:
-            return True
-        else:
-            return False
-
-
-
-
-
-terrain=Terrain(10,10)
 
 
 
