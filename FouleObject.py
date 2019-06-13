@@ -21,16 +21,29 @@ def addListe(l1,l2):
         return []
 
 ### Classes ###
-class Objet:
+class Observable:
+    def __init__(self, vue):
+        self.observateurs = []
+
+    def attacher_observateur(self, observateur):
+        self.observateurs.append(observateur)
+
+    def notifier(self):
+         #print("On notifie",len(self.observateurs))
+        for o in self.observateurs:# pas besoin de boucle
+            o.mise_a_jour(self)
+
+
+class Objet(Observable):
     """Un objet sur le terrain."""
     def __init__(self,boss, coord):
+        Observable.__init__(self,boss)
         self.boss=boss
         self.coord=coord
 
     def getCoord(self):
         """Renvoie la liste des coordonnées."""
         return self.coord
-
 
 class Obstacle(Objet):
     """Un objet fixe."""
@@ -85,7 +98,11 @@ class Voyageur(Objet):
     def avancer(self):
         """Avance le voyageur dans la direction défini par vitesse."""
         self.definirVitesse()
+        #print("On avance1",self.coord,self.direction)
         self.coord=addListe(self.coord,self.direction)
+        #print("On avance2",self.coord,self.direction)
+        self.notifier()
+
 
     def testFin(self):
         """Teste si le voyageur est arrivé."""

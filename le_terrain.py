@@ -1,8 +1,9 @@
+# coding: utf-8
 ### Importations ###
 from math import *
 from random import *
 from FouleObject import *
-### ParamÃƒÂ¨tres ###
+### Paramètres ###
 ### Fonctions ###
 def signe(x):
     """Renvoie 0, -1 ou +1 selon le signe de x."""
@@ -14,7 +15,7 @@ def signe(x):
 
 ### Importations ###
 from math import *
-### ParamÃ¨tres ###
+### Paramètres ###
 ### Fonctions ###
 
 def conversionPolaireCartesien(r,theta):
@@ -29,9 +30,6 @@ def distance(P1,P2):
 
 
 ### Classes ###
-
-
-
 
 class Terrain():
     """Terrain dans lequel la foule se dÃ©place."""
@@ -50,29 +48,30 @@ class Terrain():
         # Voyageurs
         self.listVoyageurs=[]
 
-
-
     def getPorte(self):
         return self.porte
 
     def initObstacles(self):
         self.creerObstacle([10,10])
         self.creerObstacle([30,30])
-        self.creerObstacle([80,20])
+        for i in range(50,80):
+            self.creerObstacle([i,20])
 
     def creerObstacle(self, coord):
         """CrÃ©e un obstacle."""
         self.listObstacles.append(Obstacle(self,coord))
 
     def creerVoyageur(self, coord,destination):
-        """CrÃ©e un nouveau voyageur."""
-        self.listVoyageurs.append(Voyageur(self, coord,destination))
+        """Crée un nouveau voyageur."""
+        v=Voyageur(self, coord,destination)
+        self.listVoyageurs.append(v)
+        
+        
 
     def creerMurs(self):
         for i in range(self.largeur):
             if not [i,self.longueur-1] in self.porte:
                 self.creerObstacle([i,self.longueur-1])
-                print(i,self.longueur-1)
             if not [i,0] in self.porte:
                 self.creerObstacle([i,0])
         for i in range(self.longueur):
@@ -90,8 +89,17 @@ class Terrain():
                 obstacles.append(voya)
         return obstacles
 
+    def getVoyageurs(self):
+        """Renvoie la liste des obstacles."""
+        obstacles=[]
+        for voya in self.listVoyageurs:
+                obstacles.append(voya)
+        return obstacles
+
+
     def avanceVoyageurs(self):
         """Fait avancer tous les voyageurs d'un cran."""
+        #print("avanceVoyageurs")
         for voya in self.listVoyageurs:
             voya.avancer()
 
