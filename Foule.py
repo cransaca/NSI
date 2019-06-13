@@ -7,9 +7,9 @@ def conversionPolaireCartesien(r,theta):
 
 def convertCartesienPolaire:
 
-
-
 ### Classes ###
+
+doorWidth=50
 
 class Terrain():
     """Terrain dans lequel la foule se déplace."""
@@ -17,20 +17,21 @@ class Terrain():
         self.largeur=900
         self.longeur=900
 
-        listAcces=[ [complex(200,largeur),complex(200+width,largeur)],[complex(1,2),complex(1,2)],[complex(1,2),complex(1,2)],[complex(1,2),complex(1,2)]]
+        listAcces=[ [complex(200,self.largeur),complex(200+doorWidth,self.largeur)]]
+        listAcces.append([complex(200,0),complex(200+doorWidth,0)])
+        listAcces.append([complex(self.longueur,200),complex(self.longueur,200+doorWidth)])
+        listAcces.append([complex(0,200),complex(0,200+doorWidth)])
 
-        listObstaclesFixes
-        listVoyageurs
-
-
+        listObstaclesFixes=[]
+        listVoyageurs[]
 
     def getObstacle
 
-    def creerVoyageur
+    def creerVoyageur():
 
-    def creerObstacle
+    def creerObstacle():
 
-    def avanceVoyageur
+    def avanceVoyageur():
 
     def bouclePrincipale
         while continue:
@@ -44,13 +45,13 @@ class Obstacle:
         Les murs sont des disques de rayon infini...
     """
 
-    def __init__():
-
-        coordCentre =[int, int]
-        rayon=int
+    def __init__(self,c):
+        self.coordCentre =c
+        self.rayon=10
         #forme
 
-    def getPosition
+    def getPosition(self)
+        return(self.coordCenter,self.rayon)
         """Renvoie coordonnées, rayon et forme."""
 
 
