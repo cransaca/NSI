@@ -1,107 +1,103 @@
-### Importations ###
-from math import *
-### ParamÃ¨tres ###
+﻿### Importations ###
+#from math import *
+
+### Paramètres ###
 ### Fonctions ###
+def signe(x):
+    """Renvoie 0, -1 ou +1 selon le signe de x."""
+    if x==0:
+        return 0
+    else:
+        return x/abs(x)
 
-
-
+def addListe(l1,l2):
+    """Additionne les valeurs de deux listes de même taille."""
+    if len(l1)==len(l2):
+        l3=[]
+        for i in range(len(l1)):
+            l3.append(l1[i]+l2[i])
+        return l3
+    else:
+        return []
 
 ### Classes ###
+class Objet:
+    """Un objet sur le terrain."""
+    def __init__(self,boss, coord):
+        self.boss=boss
+        self.coord=coord
 
-class Terrain():
-    """Terrain dans lequel la foule se dÃ©place."""
-    def __init__(self, largeur, longueur,obstacle=None, voyageur=None ):
-        # Dimension du terrain
-        self.largeur=largeur
-        self.longueur=longueur
-
-        # Organisation du terrain
-        self.listAcces=[]
-        self.listObstacles=[]
-        self.initObstacleFixes(self)  # initialiser liste des obstacles
-
-        # Voyageurs
-        self.listVoyageurs=[]
+    def getCoord(self):
+        """Renvoie la liste des coordonnées."""
+        return self.coord
 
 
-
-        # Go !
-        self.bouclePrincipale()
-
-
-
-    def initObstacleFixes(self):
-        """Initialise le terrain avant l'arrivÃ©e des voyageurs."""
-        self.creerObstacles([3,3])
-        self.creerObstacles([4,4])
-        self.creerObstacles([8,2])
-
-    def creerObstacle(self, coord):
-        """CrÃ©e un obstacle."""
-        self.listObstacles.append(Obstacle(self,coord))
-
-    def creerVoyageur(self, coord,destination):
-        """CrÃ©e un nouveau voyageur."""
-        self.listVoyageurs.append(Voyageur(self,coord, destination))
-
-
-    def avanceVoyageur(self):
-        """Fait avancer tous les voyageurs d'un cran."""
-        for voya in self.listVoyageurs:
-            voya.avance()
-
-    def bouclePrincipale():
-        while True:
-            self.creerVoyageur([7,7])
-
-
-class Obstacle:
-    """Les obstacles sont des disques, qui peuvent etre fixes, ou non comme les voyageurs,
-        Les murs sont des disques de rayon infini...
-        boss=Terrain , centre=complex , rayon=float
-        *forme="disque","carrÃ©" ou "murN","murS","murE","murW" #sert uniquement pour l'affichage
-        *couleur
-    """
-    def __init__(self,boss, centre,rayon,forme="voyageur", arrivee=None, )):
-        self.boss=boss # Terrain dans lequel se trouve l'obstacle
-
-        self.coordCentre=centre
-        self.rayon=rayon
-        self.forme=forme
-
+class Obstacle(Objet):
+    """Un objet fixe."""
+    def __init__(self,boss, coord, couleur="black"):
+        Objet.__init__(self, boss, coord)
         self.couleur=couleur
 
+class Voyageur(Objet):
+    """Un objet qui bouge."""
+    def __init__(self,boss, coord,destination,couleur="black"):
+        Objet.__init__(self, boss, coord)
+        self.couleur=couleur
+        self.destination=destination
+        self.direction=(0,0)
+        self.directionPossible=[(1,0),(1,1),(0,1),(-1,1),(-1,0),(-1,-1),(0,-1),(1,-1)]
+        self.objetProche={} # Dictionnaire des cases autour
 
-        self.arrivee=arrivee
+    def regarderAutour(self):
+        """Actualise la liste objets autour du voyageur."""
+        # Réinitialise le tableau des objets proches
+        self.objetProche={}
+        for i in range(-1,2):
+            for j in range(-1,2):
+                self.objetProche[i,j]=None
+        # Recherche des objets proches
+        for obj in self.boss.getObject():
+            X=obj.coord[0]-self.coord[0]
+            Y=obj.coord[1]-self.coord[1]
+            if -1<=X<=1 and -1<=Y<=1:
+                self.objetProche[X,Y]=obj
 
-        self.vitesseNorme= int # Const
-        self.vitesseAngle
-        self.vitesseVecteur=[int, int]
+    def definirVitesse(self):
+        """Définie la direction à prendre."""
+        self.direction=(signe(self.destination[0]-self.coord[0]),signe(self.destination[1]-self.coord[1]))
+        self.regarderAutour()
 
-        positionSuivante
-        listColision
+        # Si la case n'est pas libre
+        if self.objetProche[self.direction]!=None:
+            # On test les autres directions
+            i=self.directionPossible.index(self.direction)
+            if self.objetProche[self.directionPossible[(i+1)%8]]==None:
+                self.direction=self.directionPossible[(i+1)%8]
+            elif self.objetProche[self.directionPossible[(i-1)%8]]==None:
+                self.direction=self.directionPossible[(i-1)%8]
+            elif self.objetProche[self.directionPossible[(i+2)%8]]==None:
+                self.direction=self.directionPossible[(i+2)%8]
+            elif self.objetProche[self.directionPossible[(i-2)%8]]==None:
+                self.direction=self.directionPossible[(i-2)%8]
+            else:
+                self.direction=(0,0)
+
+    def avancer(self):
+        """Avance le voyageur dans la direction défini par vitesse."""
+        self.coord=addListe(self.coord,self.direction)
+
+    def testFin(self):
+        """Teste si le voyageur est arrivé."""
+        if self.coord==self.destination:
+            return True
+        else:
+            return False
 
 
-    def getEtat(self):
-        """Renvoie un dictionnaire avec le centre, le rayon et la forme de l'obstacle."""
-        return {"centre":self.centre, "rayon":self.rayon, "forme":self.forme}
-
-
-
-    def colision(self, obstacle):
-        return True//False
-
-    def avancer
-
-    def ChangerDirection
-
-    def testFin
 
 
 
 
-
-terrain=Terrain(10 10,obstacle=None, voyageur=None )
 
 
 
