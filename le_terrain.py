@@ -2,7 +2,7 @@
 from math import *
 from random import *
 
-### ParamÃ¨tres ###
+### ParamÃƒÂ¨tres ###
 ### Fonctions ###
 def signe(x):
     """Renvoie 0, -1 ou +1 selon le signe de x."""
@@ -14,7 +14,7 @@ def signe(x):
 
 ### Importations ###
 from math import *
-### Paramètres ###
+### ParamÃ¨tres ###
 ### Fonctions ###
 
 def conversionPolaireCartesien(r,theta):
@@ -31,7 +31,7 @@ def distance(P1,P2):
 ### Classes ###
 
 class Terrain():
-    """Terrain dans lequel la foule se déplace."""
+    """Terrain dans lequel la foule se dÃ©place."""
     def __init__(self, largeur, longueur):#,obstacle=None, voyageur=None ):
         # Dimension du terrain
         self.largeur=largeur
@@ -40,16 +40,17 @@ class Terrain():
         # Organisation du terrain
         self.listAcces=[]
         self.listObstacles=[]
+        self.porte=[[0,self.longueur//2],[self.largeur,self.longueur//2],[self.largeur//2,0],[self.largeur//2,self.longueur]]
+
         self.initObstacles()
         self.creerMurs()
         # Voyageurs
         self.listVoyageurs=[]
 
-        self.porte=[[0,self.longueur//2],[self.largeur,self.longueur//2],[self.largeur//2,0],[self.largeur//2,self.longueur]]
 
 
-        # Go !
-        self.bouclePrincipale()
+    def getPorte(self):
+        return self.porte
 
     def initObstacles(self):
         self.creerObstacle([1,1])
@@ -57,11 +58,11 @@ class Terrain():
         self.creerObstacle([8,2])
 
     def creerObstacle(self, coord):
-        """Crée un obstacle."""
+        """CrÃ©e un obstacle."""
         self.listObstacles.append(Obstacle(self,coord))
 
     def creerVoyageur(self, coord,destination):
-        """Crée un nouveau voyageur."""
+        """CrÃ©e un nouveau voyageur."""
         self.listVoyageurs.append(Voyageur(self, coord,destination))
 
     def creerMurs(self):
@@ -76,14 +77,11 @@ class Terrain():
             if not [0,i] in self.porte:
                 self.creerObstacle([0,i])
 
-
-
-
-    def getObject(self):
+    def getObjects(self):
         """Renvoie la liste des obstacles."""
         obstacles=[]
         for obst in self.listObstacles:
-                osbtacles.append(obst)
+                obstacles.append(obst)
         for voya in self.listVoyageurs:
                 obstacles.append(voya)
         return obstacles
@@ -93,10 +91,6 @@ class Terrain():
         for voya in self.listVoyageurs:
             voya.avancer()
 
-
-
-
-
 ### Classes ###
 class Objet:
     """Un objet sur le terrain."""
@@ -105,7 +99,7 @@ class Objet:
         self.coord=coord
 
     def getCoord(self):
-        """Renvoie la liste des coordonnÃ©es."""
+        """Renvoie la liste des coordonnÃƒÂ©es."""
         return self.coord
 
 
@@ -125,14 +119,14 @@ class Voyageur(Objet):
         self.vitesse=[0,0]
 
     def definirVitesse(self):
-        """DÃ©finie la direction Ã  prendre."""
+        """DÃƒÂ©finie la direction ÃƒÂ  prendre."""
         None
 
     def avancer(self):
         None
 
     def testFin(self):
-        """Teste si le voyageur est arrivÃ©."""
+        """Teste si le voyageur est arrivÃƒÂ©."""
         if self.coord==self.destination:
             return True
         else:
