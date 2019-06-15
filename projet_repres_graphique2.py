@@ -29,7 +29,8 @@ class Voyageur_vue:
         pygame.display.update()
         voyageur_modele.attacher_observateur(self)# on associe à un voyageur le voyageur vue.
 
-    def mise_a_jour(self,voyageur_modele,couleur):
+    def mise_a_jour(self,voyageur_modele):
+        couleur=voyageur_modele.couleur
         pygame.draw.rect(screen, color_back,[self.x*longueur_rect,self.y*largeur_rect,longueur_rect,largeur_rect],0)
         self.x,self.y = voyageur_modele.getCoord()
         #print("Mise à jour",self.x,self.y)
