@@ -2,7 +2,7 @@
 ### Importations ###
 from math import *
 from random import *
-from FouleObject import *
+from FouleObject2 import *
 ### Paramètres ###
 ### Fonctions ###
 def signe(x):
@@ -61,12 +61,11 @@ class Terrain():
         """CrÃ©e un obstacle."""
         self.listObstacles.append(Obstacle(self,coord))
 
-    def creerVoyageur(self, coord,destination):
+    def creerVoyageur(self, coord,destination,couleur=(255,0,0)):
         """Crée un nouveau voyageur."""
-        v=Voyageur(self, coord,destination)
+        v=Voyageur(self, coord,destination,couleur)
         self.listVoyageurs.append(v)
-        
-        
+
 
     def creerMurs(self):
         for i in range(self.largeur):
@@ -75,8 +74,8 @@ class Terrain():
             if not [i,0] in self.porte:
                 self.creerObstacle([i,0])
         for i in range(self.longueur):
-            if not [self.longueur-1,i] in self.porte:
-                self.creerObstacle([self.longueur-1,i])
+            if not [self.largeur-1,i] in self.porte:
+                self.creerObstacle([self.largeur-1,i])
             if not [0,i] in self.porte:
                 self.creerObstacle([0,i])
 
