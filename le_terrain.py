@@ -12,7 +12,6 @@ def signe(x):
     else:
         return x/abs(x)
 
-
 ### Importations ###
 from math import *
 ### Paramètres ###
@@ -33,10 +32,7 @@ def dist(P1,P2):
     (c,d)=P2
     return sqrt((a-c)**2+(b-d)**2)
 
-
-
 ### Classes ###
-
 class Terrain():
     """Terrain dans lequel la foule se dÃ©place."""
     def __init__(self, largeur, longueur):#,obstacle=None, voyageur=None ):
@@ -53,13 +49,14 @@ class Terrain():
         self.AjouterPorte((self.largeur//2,0),5)
         self.AjouterPorte((self.largeur//2,self.longueur-1),5)
         #self.porte=[(0,self.longueur//2),(self.largeur-1,self.longueur//2),(self.largeur//2,0),(self.largeur//2,self.longueur-1)]
+        self.creerObstaclesDisque((20,20),5)
+                
         self.creerMurs()
         self.initObstacles()
         # Voyageurs
         self.listVoyageurs=[]
         
     def AjouterPorte(self,coord,radius):
-        print(coord)
         for i in range(self.largeur):
             if dist((i,self.longueur-1),coord)<radius:
                 self.creerObstacle((i,self.longueur-1))
@@ -71,12 +68,14 @@ class Terrain():
             if dist((self.largeur-1,i),coord)<radius:
                 self.creerObstacle((self.largeur-1,i))
                 self.porte.append((self.largeur-1,i))
-            print("point=",(0,i),"center=",coord,"dist=",dist((0,i),coord),radius)
+            #print("point=",(0,i),"center=",coord,"dist=",dist((0,i),coord),radius)
             if dist((0,i),coord)<radius:
                 self.creerObstacle((0,i))
                 self.porte.append((0,i))
         print("nbporte",len(self.porte))
         print(self.porte)
+        print()
+        
     def nbPorte(self):
         return len(self.porte)
 
@@ -88,11 +87,20 @@ class Terrain():
         self.creerObstacle((3,3))
         for i in range(1,8):
             self.creerObstacle((i,7))
+        self.creerObstaclesDisque((10,10),5)
 
-
+    def creerObstaclesDisque(self,coord,radius):
+        print("disque")
+        (x,y)=coord
+        for i in range(-radius,radius):
+            for j in range(-radius,radius):
+                if dist((i,j),(0,0))<radius/2.0:
+                    print("obstacle")
+                    self.creerObstacle((x+i,y+j))
 
     def creerObstacle(self, coord):
         """CrÃ©e un obstacle."""
+        print(coord)
         self.listObstacles.append(Objet(self,coord))
 
     def creerVoyageur(self, coord,destination,couleur=(255,0,0)):
@@ -103,6 +111,7 @@ class Terrain():
         return self.listVoyageurs[len(self.listVoyageurs)-1]
 
     def creerMurs(self):
+        print(self.porte)
         for i in range(self.largeur):
             if not (i,self.longueur-1) in self.porte:
                 self.creerObstacle((i,self.longueur-1))
@@ -138,10 +147,3 @@ class Terrain():
             voya.avancer()
 
 ### Classes ###
-
-
-
-
-
-
-

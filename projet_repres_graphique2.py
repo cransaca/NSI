@@ -9,7 +9,6 @@ from le_terrain import *
 import pygame
 import time
 
-
 # Defines size of individual cell
 longueur_rect, largeur_rect= length//nb_cases_l, width//nb_cases_w  
 
@@ -103,7 +102,3 @@ while done==False:
             #    done=True
             time.sleep(0.1)
 pygame.quit()
-
-
-
-
