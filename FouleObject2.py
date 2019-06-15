@@ -1,6 +1,9 @@
 ﻿### Importations ###
 #from math import *
 
+color_back=(37,253, 233 )  # Backgroud color
+color_wall=(255,255, 255)  # Wall color
+
 ### Paramètres ###
 ### Fonctions ###
 def signe(x):
@@ -26,20 +29,18 @@ class Observable:
 
 class Objet(Observable):
     """Un objet sur le terrain."""
-    def __init__(self,boss, coord):
+    def __init__(self,boss, coord, couleur="black"):
         Observable.__init__(self,boss)
         self.boss=boss
         self.coord=coord
-
+        self.couleur=couleur
     def getCoord(self):
         """Renvoie la liste des coordonnées."""
         return self.coord
-
-class Obstacle(Objet):
-    """Un objet fixe."""
-    def __init__(self,boss, coord, couleur="black"):
-        Objet.__init__(self, boss, coord)
+    def setColor(self,couleur):
         self.couleur=couleur
+
+
 
 class Voyageur(Objet):
     """Un objet qui bouge."""
@@ -49,37 +50,43 @@ class Voyageur(Objet):
         self.destination=destination
         self.direction=(0,0)
 
-
     def avancer(self):
-        """Définie la direction à prendre."""
+        """Définit la direction à prendre."""
         x1,y1=self.coord[0], self.coord[1]
         self.direction=(signe(self.destination[0]-x1),signe(self.destination[1]-y1))
         x=self.direction[0]
         y=self.direction[1]
+        # list coordinates of possible location after movement.
         listDirections=[(x1+x,y1+y),(x1+signe(x+y),y1+signe(-x+y)),(x1+signe(x-y),y1+signe(x+y)),(x1-y,y1+x),(x1+y,y1-x)]
 
-        # Recherche des objets proches
+        # Eliminate occupied squares
         for obj in self.boss.getObjects():
             o=obj.getCoord()
+            #print(o)
             if o in listDirections:
                 listDirections.remove(o)
-                #définition de la nouvelle direction
+        #a=input("hey")
+        #définition de la nouvelle direction
         if  listDirections==[]:
-            self.coord=(0,0)
+            self.coord=(x1,y1)
         else:
             self.coord=listDirections[0]
-
-          #print("On avance2",self.coord,self.direction)
+            
+            if egal(self.coord,self.destination):
+                self.setColor(color_back)
+                self.notifier()
+                self.boss.listVoyageurs.remove(self)
+                print("out")
+                
+        #print("On avance2",self.coord,self.direction)
         self.notifier()
 
 
-    def testFin(self):
-        """Teste si le voyageur est arrivé."""
-        if self.coord==self.destination:
-            return True
-        else:
-            return False
-
+def egal(aa,bb):
+    (a,b)=aa
+    (c,d)=bb
+    print ((a,b),(c,d))
+    return ((a==c)and(b==d))
 
 
 
