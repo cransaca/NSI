@@ -10,7 +10,7 @@ import pygame
 import time
 
 # Defines size of individual cell
-longueur_rect, largeur_rect= length//nb_cases_l, width//nb_cases_w  
+longueur_rect, largeur_rect= length//nb_cases_l, width//nb_cases_w
 
 #A function to stop the program
 def wait():
@@ -33,7 +33,9 @@ class Voyageur_vue:
         pygame.draw.rect(screen, color_back,[self.x*longueur_rect,self.y*largeur_rect,longueur_rect,largeur_rect],0)
         self.x,self.y = voyageur_modele.getCoord()
         #print("Mise à jour",self.x,self.y)
-        pygame.draw.rect(screen, couleur,[self.x*longueur_rect,self.y*largeur_rect,longueur_rect,largeur_rect],0)
+        #pygame.draw.rect(screen, couleur,[self.x*longueur_rect,self.y*largeur_rect,longueur_rect,largeur_rect],0)
+        rayon=int(sqrt(2*largeur_rect**2)/2)-1
+        pygame.draw.circle(screen, couleur,[self.x*longueur_rect+longueur_rect//2,self.y*largeur_rect+largeur_rect//2],rayon,0)
         pygame.display.update()
 
 screen = pygame.display.set_mode((length,width))
@@ -63,7 +65,7 @@ while done==False:
             #print("begin")
             doorin=randint(0,nbDoor-1) #choose door
             doorout=randint(0,nbDoor-1)
-                       
+
             # make sure exit door is not entrance
             while dist(T.getPorte()[doorin],T.getPorte()[doorout])<20:
                 doorout=randint(0,nbDoor-1) #choose door
@@ -75,7 +77,7 @@ while done==False:
                 T.creerVoyageur(T.getPorte()[doorin],T.getPorte()[doorout],list_color_people[doorin%6]) # horizontal va en face
                 listObservateurs.append(Voyageur_vue(screen,T.lastVoyageur()))
                 n=n+1
-            
+
             #for obs in T.getVoyageurs():
             #    listObservateurs.append(Voyageur_vue(screen,obs))
             #print ("loop",len(listObservateurs))

@@ -13,6 +13,11 @@ def signe(x):
     else:
         return int(x/abs(x))
 
+def egal(aa,bb):
+    (a,b)=aa
+    (c,d)=bb
+    print ((a,b),(c,d))
+    return ((a==c)and(b==d))
 ### Classes ###
 class Observable:
     def __init__(self, vue):
@@ -71,22 +76,17 @@ class Voyageur(Objet):
             self.coord=(x1,y1)
         else:
             self.coord=listDirections[0]
-            
+
             if egal(self.coord,self.destination):
                 self.setColor(color_back)
                 self.notifier()
                 self.boss.listVoyageurs.remove(self)
                 print("out")
-                
+
         #print("On avance2",self.coord,self.direction)
         self.notifier()
 
 
-def egal(aa,bb):
-    (a,b)=aa
-    (c,d)=bb
-    print ((a,b),(c,d))
-    return ((a==c)and(b==d))
 
 
 
