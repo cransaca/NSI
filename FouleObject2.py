@@ -1,4 +1,5 @@
 ﻿### Importations ###
+from random import *
 #from math import *
 
 color_back=(37,253, 233 )  # Backgroud color
@@ -16,7 +17,7 @@ def signe(x):
 def egal(aa,bb):
     (a,b)=aa
     (c,d)=bb
-    print ((a,b),(c,d))
+    #print ((a,b),(c,d))
     return ((a==c)and(b==d))
 ### Classes ###
 class Observable:
@@ -54,7 +55,11 @@ class Voyageur(Objet):
         self.couleur=couleur
         self.destination=destination
         self.direction=(0,0)
-
+        self.nbPas=0
+        
+    def getnbPas(self):
+        return self.nbPas
+        
     def avancer(self):
         """Définit la direction à prendre."""
         x1,y1=self.coord[0], self.coord[1]
@@ -75,13 +80,24 @@ class Voyageur(Objet):
         if  listDirections==[]:
             self.coord=(x1,y1)
         else:
-            self.coord=listDirections[0]
+            self.nbPas+=1
+            if len(listDirections)==1:
+                r=0
+            else:
+                r=0
+                alea=15
+                if randint(0,alea)==alea:
+                    r=randint(0,len(listDirections))
+                    if r==len(listDirections):
+                        r=1
+            self.coord=listDirections[r]
 
             if egal(self.coord,self.destination):
                 self.setColor(color_back)
                 self.notifier()
+                self.boss.settotalPas(self.boss.totalPas+self.nbPas)
                 self.boss.listVoyageurs.remove(self)
-                print("out")
+                #print("out")
 
         #print("On avance2",self.coord,self.direction)
         self.notifier()
